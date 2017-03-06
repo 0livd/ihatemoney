@@ -121,15 +121,24 @@ def authenticate(project_id=None):
 def home():
     project_form = ProjectForm()
     auth_form = AuthenticationForm()
-    return render_template("home.html", project_form=project_form,
-            auth_form=auth_form, session=session)
+    return render_template("home.html", project_form=project_form, auth_form=auth_form,
+                           session=session, public_server=current_app.config['PUBLIC_SERVER'])
 
 
 @main.route("/create", methods=["GET", "POST"])
 def create_project():
     form = ProjectForm()
+    public_server = current_app.config['PUBLIC_SERVER']
+    if public_server:
+        form.server_password_validation.data = current_app.config['PUBLIC_SERVER_PASSWORD']
+    else:
+        # We don't ask for the server password on a private server
+        del form.server_password
+        del form.server_password_validation
+
     if request.method == "GET" and 'project_id' in request.values:
         form.name.data = request.values['project_id']
+
 
     if request.method == "POST":
         # At first, we don't want the user to bother with the identifier
@@ -174,7 +183,7 @@ def create_project():
                 msg_compl=msg_compl, project=project.id))
             return redirect(url_for(".invite", project_id=project.id))
 
-    return render_template("create_project.html", form=form)
+    return render_template("create_project.html", form=form, public_server=public_server)
 
 
 @main.route("/password-reminder", methods=["GET", "POST"])
@@ -236,6 +245,10 @@ def demo():
 
     Create a demo project if it doesnt exists yet (or has been deleted)
     """
+    # Disable demo project on a public server
+    if current_app.config['PUBLIC_SERVER']:
+        raise Redirect303(url_for(".create_project",
+                                  project_id='demo'))
     project = Project.query.get("demo")
     if not project:
         project = Project(id="demo", name=u"demonstration", password="demo",

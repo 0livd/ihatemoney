@@ -3,6 +3,6 @@
 {% block content %}
 <h2>{{ _("Create a new project") }}</h2>
 <form class="form-horizontal" method="post">
-    {{ forms.create_project(form) }}
+    {{ forms.create_project(form, public_server=public_server) }}
 </form>
 {% endblock %}

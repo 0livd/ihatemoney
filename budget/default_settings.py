@@ -4,3 +4,5 @@ SQLACHEMY_ECHO = DEBUG
 SECRET_KEY = "tralala"
 
 MAIL_DEFAULT_SENDER = ("Budget manager", "budget@notmyidea.org")
+PUBLIC_SERVER = True
+PUBLIC_SERVER_PASSWORD = "verylongpassword"

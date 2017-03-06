@@ -5,7 +5,9 @@
     <header id="header" class="row">
       <div class="col-5  offset-md-2">
             <h2>{{ _("Manage your shared <br>expenses, easily") }}</h2>
+            {% if not public_server %}
             <a href="{{ url_for(".demo") }}" class="tryout btn">{{ _("Try out the demo")  }}</a>
+            {% endif %}
         </div>
         <div class="col-4">
             <p class="additional-content">{{ _("You're sharing a house?") }}<br /> {{ _("Going on holidays with friends?") }}<br /> {{ _("Simply sharing money with others?") }} <br /><strong>{{ _("We can help!") }}</strong></p>
@@ -29,7 +31,7 @@
             <form id="creation-form" class="form-horizontal" action="{{ url_for(".create_project") }}" method="post">
                 <fieldset class="form-group">
                     <legend>...{{ _("or create a new one") }}</legend>
-                    {{ forms.create_project(project_form, home=True) }}
+                    {{ forms.create_project(project_form, home=True, public_server=public_server) }}
                 </fieldset>
                 <div class="controls">
                     <button class="btn" type="submit">{{ _("let's get started") }}</button>

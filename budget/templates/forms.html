@@ -45,7 +45,7 @@
 
 {% endmacro %}
 
-{% macro create_project(form, home=False) %}
+{% macro create_project(form, home=False, public_server=False) %}
 
     {% include "display_errors.html" %}
     {{ form.hidden_tag() }}
@@ -55,6 +55,9 @@
     {{ input(form.name) }}
     {{ input(form.password) }}
     {{ input(form.contact_email) }}
+    {% if public_server %}
+    {{ input(form.server_password) }}
+    {% endif %}
     {% if not home %}
     {{ submit(form.submit, home=True) }}
     {% endif %}

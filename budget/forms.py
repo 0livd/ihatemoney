@@ -1,6 +1,6 @@
 from flask_wtf import DateField, DecimalField, Email, Form, PasswordField, \
     Required, SelectField, SelectMultipleField, SubmitField, TextAreaField, \
-    TextField, ValidationError
+    TextField, ValidationError, EqualTo
 from flask_babel import lazy_gettext as _
 from flask import request
 
@@ -62,6 +62,12 @@ class EditProjectForm(Form):
 class ProjectForm(EditProjectForm):
     id = TextField(_("Project identifier"), validators=[Required()])
     password = PasswordField(_("Private code"), validators=[Required()])
+    server_password = PasswordField(_("Server password"),
+                                    validators=[Required(),
+                                                EqualTo('server_password_validation',
+                                                        message=_("Server password mismatch "))])
+    server_password_validation = PasswordField("Server password validation",
+                                               validators=[Required()])
     submit = SubmitField(_("Create the project"))
 
     def validate_id(form, field):
