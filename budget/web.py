@@ -153,13 +153,16 @@ def home():
     # If ADMIN_PASSWORD is empty we consider that we are not in admin mode
     admin = bool(current_app.config['ADMIN_PASSWORD'])
     auth_form = AuthenticationForm()
+    activate_demo_project = current_app.config['ACTIVATE_DEMO_PROJECT']
 
     if not admin:
         project_form = ProjectForm()
         return render_template("home.html", project_form=project_form,
+                               activate_demo_project=activate_demo_project,
                                auth_form=auth_form, session=session, admin=admin)
     # If we are in admin mode we don't need to pass a project form to home
-    return render_template("home.html", auth_form=auth_form, session=session, admin=admin)
+    return render_template("home.html", auth_form=auth_form, session=session, admin=admin,
+                           activate_demo_project=activate_demo_project)
 
 
 @main.route("/create", methods=["GET", "POST"])
@@ -297,8 +300,13 @@ def demo():
 
     Create a demo project if it doesnt exists yet (or has been deleted)
     """
+    activate_demo_project = current_app.config['ACTIVATE_DEMO_PROJECT']
     project = Project.query.get("demo")
-    if not project:
+
+    if not project and not activate_demo_project:
+        raise Redirect303(url_for(".create_project",
+                                  project_id='demo'))
+    if not project and activate_demo_project:
         project = Project(id="demo", name=u"demonstration", password="demo",
                 contact_email="demo@notmyidea.org")
         db.session.add(project)

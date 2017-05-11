@@ -333,6 +333,14 @@ class BudgetTestCase(TestCase):
         self.app.get("/demo")
         self.assertTrue(models.Project.query.get("demo") is not None)
 
+    def test_demo_private(self):
+        # test redirection to /create when accessing demo project on a private instance
+        run.app.config['ACTIVATE_DEMO_PROJECT'] = False
+        run.app.config['ADMIN_PASSWORD'] = "pass"
+
+        resp = self.app.get("/demo")
+        self.assertIn('<a href="/create?project_id=demo">', resp.data.decode('utf-8'))
+
     def test_authentication(self):
         # try to authenticate without credentials should redirect
         # to the authentication page
