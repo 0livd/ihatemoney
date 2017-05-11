@@ -150,13 +150,20 @@ def authenticate(project_id=None):
 
 @main.route("/")
 def home():
-    project_form = ProjectForm()
+    # If ADMIN_PASSWORD is empty we consider that we are not in admin mode
+    admin = bool(current_app.config['ADMIN_PASSWORD'])
     auth_form = AuthenticationForm()
-    return render_template("home.html", project_form=project_form,
-            auth_form=auth_form, session=session)
+
+    if not admin:
+        project_form = ProjectForm()
+        return render_template("home.html", project_form=project_form,
+                               auth_form=auth_form, session=session, admin=admin)
+    # If we are in admin mode we don't need to pass a project form to home
+    return render_template("home.html", auth_form=auth_form, session=session, admin=admin)
 
 
 @main.route("/create", methods=["GET", "POST"])
+@require_admin
 def create_project():
     form = ProjectForm()
     if request.method == "GET" and 'project_id' in request.values:
