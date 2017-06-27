@@ -289,7 +289,7 @@ def delete_project():
     g.project.remove_project()
     flash(_('Project successfully deleted'))
 
-    return redirect(url_for(".home"))
+    return redirect(request.headers.get('Referer') or url_for('.home'))
 
 
 @main.route("/exit")
@@ -502,5 +502,6 @@ def settle_bill():
 
 
 @main.route("/dashboard")
+@requires_admin
 def dashboard():
     return render_template("dashboard.html", projects=Project.query.all())

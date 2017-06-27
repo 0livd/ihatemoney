@@ -402,6 +402,11 @@ class BudgetTestCase(TestCase):
         resp = self.app.post("/admin?goto=%2Fcreate", data={'admin_password': ''})
         self.assertNotIn('<a href="/create">/create</a>', resp.data.decode('utf-8'))
 
+    def test_dashboard_access(self):
+        # test that the dashboard is deactivated when no admin password is defined
+        resp = self.app.get("/dashboard")
+        self.assertIn('<div class="alert alert-danger">', resp.data.decode('utf-8'))
+
     def test_manage_bills(self):
         self.post_project("raclette")
 

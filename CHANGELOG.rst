@@ -9,6 +9,11 @@ This document describes changes between each past release.
 ### Changed
 
 - **BREAKING CHANGE** Use a hashed ``ADMIN_PASSWORD`` instead of a clear text one, ``./budget/manage.py generate_password_hash`` can be used to generate a proper password HASH (#236)
+- **BREAKING CHANGE** Admin privileges are required to access the dashboard
+
+### Added
+
+- Add delete and edit project actions in the dashboard
 
 ### Removed
 
