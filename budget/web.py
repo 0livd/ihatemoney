@@ -57,6 +57,15 @@ def add_project_id(endpoint, values):
 
 
 @main.url_value_preprocessor
+def set_admin_mode(endpoint, values):
+    """Set the is_admin_mode_enabled boolean application wide
+    So the whole applciation is aware if it is running in admin mode or not
+    """
+    # If ADMIN_PASSWORD is empty we consider that admin mode is disabled
+    g.is_admin_mode_enabled = bool(current_app.config['ADMIN_PASSWORD'])
+
+
+@main.url_value_preprocessor
 def pull_project(endpoint, values):
     """When a request contains a project_id value, transform it directly
     into a project by checking the credentials are stored in session.
@@ -156,13 +165,10 @@ def authenticate(project_id=None):
 def home():
     project_form = ProjectForm()
     auth_form = AuthenticationForm()
-    # If ADMIN_PASSWORD is empty we consider that admin mode is disabled
-    is_admin_mode_enabled = bool(current_app.config['ADMIN_PASSWORD'])
     is_demo_project_activated = current_app.config['ACTIVATE_DEMO_PROJECT']
 
     return render_template("home.html", project_form=project_form,
                            is_demo_project_activated=is_demo_project_activated,
-                           is_admin_mode_enabled=is_admin_mode_enabled,
                            auth_form=auth_form, session=session)
 
 

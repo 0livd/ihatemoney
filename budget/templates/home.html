@@ -28,7 +28,7 @@
             </form>
         </div>
         <div class="col-xs-12 col-sm-5 col-md-3 offset-sm-1">
-            {% if is_admin_mode_enabled %}
+            {% if g.is_admin_mode_enabled %}
             <a href="{{ url_for(".create_project") }}">...{{ _("or create a new one") }}</a>
             {% else %}
             <form id="creation-form" class="form-horizontal" action="{{ url_for(".create_project") }}" method="post">
