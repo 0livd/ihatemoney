@@ -14,6 +14,7 @@ This document describes changes between each past release.
 ### Added
 
 - Add delete and edit project actions in the dashboard
+- Add a link to the dashboard in the navigation bar when in administration mode
 
 ### Removed
 
