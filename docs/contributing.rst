@@ -39,13 +39,25 @@ Accessing dev server
 In any case, you can point your browser at `http://localhost:5000 <http://localhost:5000>`_.
 It's as simple as that!
 
-
 Updating
 --------
 
 In case you want to update to newer versions (from git), you can just run the "update" command::
 
   make update
+
+Create database migrations
+--------------------------
+
+In case you need to modify the database schema, first update the models in ihatemoney/models.py.
+Then run the following command to create a new database revision file::
+
+  make create-database-revision
+
+If your changes are simple enough, the generated script will be populated with
+the necessary migrations steps.
+For complex migrations, these steps need to be written manually. Existing revision files
+can be taken as reference.
 
 Useful settings
 ----------------
